@@ -65,11 +65,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visi
 .block-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px}
 .row{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
 .row:first-of-type{border-top:0}
-.dot{width:12px;height:12px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.w{min-width:42px;height:30px;padding:0 6px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:14px;background:var(--surface-2);border:1px solid var(--line);flex-shrink:0}
 .row .txt{flex:1;min-width:0}
 .row .t1{font-weight:700}
 .row .t2{font-size:14px;color:var(--muted);overflow-wrap:anywhere}
-.row.off .dot{background:var(--faint)}
+.row.off .w{color:var(--faint)}
 .row.off .t1{color:var(--muted);text-decoration:line-through}
 .del{border:0;background:var(--surface-2);color:var(--muted);font-size:20px;width:36px;height:36px;border-radius:12px;flex-shrink:0}
 .empty{color:var(--muted);text-align:center;padding:8px 0;margin:0}
@@ -89,13 +89,13 @@ details.block[open] summary::after{content:"−"}
 .range-row output{font-weight:800;min-width:56px;text-align:right}
 
 /* Campaña */
-.bars{display:grid;grid-template-columns:repeat(9,1fr);gap:6px;align-items:end;height:140px;padding-top:10px}
+.bars{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;align-items:end;height:140px;padding-top:10px}
 .bar{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%;min-width:0;border:0;background:none;padding:0}
 .bar .col{width:100%;max-width:28px;border-radius:8px 8px 3px 3px;background:var(--line);min-height:4px}
 .bar.has .col{background:rgba(242,169,59,.55)}
 .bar.cur .col{background:linear-gradient(180deg,#ffc56a,var(--accent-2))}
-.bar .v{font-size:11px;color:var(--muted);font-weight:700}
-.bar .mo{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.bar .v{font-size:10px;color:var(--muted);font-weight:700}
+.bar .mo{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase}
 .bar.cur .mo{color:var(--fg)}
 .year-total{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .year-total b{font-family:var(--display);font-size:26px;color:var(--accent)}
@@ -112,8 +112,11 @@ details.block[open] summary::after{content:"−"}
 .sheet-body h3{font-size:13px;margin:6px 0 0;color:var(--accent);letter-spacing:.12em;text-transform:uppercase}
 .sheet-body p,.sheet-body li{color:var(--muted);font-size:15px;margin:0}
 .sheet-body ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
-.types{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.type{border:1px solid var(--line);background:var(--surface-2);border-radius:14px;padding:10px 12px;font-size:15px;font-weight:700;text-align:left;min-height:48px}
+.types{display:flex;flex-direction:column;gap:12px}
+.tgroup{display:flex;flex-direction:column;gap:8px}
+.tgroup > span{font-size:13px;font-weight:800;color:var(--muted)}
+.tchips{display:flex;flex-wrap:wrap;gap:6px}
+.type{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:9px 13px;font-size:14px;font-weight:700}
 .type[aria-pressed="true"]{background:rgba(242,169,59,.16);border-color:var(--accent)}
 .type-desc{background:var(--bg);border-radius:14px;padding:12px 14px;font-size:15px;color:var(--muted)}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -122,6 +125,9 @@ details.block[open] summary::after{content:"−"}
 .field > label{font-size:14px;font-weight:700;color:var(--muted)}
 .check{display:flex;align-items:center;gap:12px;font-weight:600}
 .check input{width:24px;height:24px;accent-color:var(--accent);flex-shrink:0}
+.seg{display:flex;background:var(--bg);border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:none;padding:11px 6px;border-radius:10px;font-weight:700;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface-2);color:var(--fg)}
 .ghost{border:1px solid var(--line);background:var(--surface-2);border-radius:16px;padding:14px;font-weight:700;text-align:center;display:block;width:100%}
 .tbl{width:100%;border-collapse:collapse;font-size:15px}
 .tbl td{padding:8px 0;border-top:1px solid var(--line);color:var(--muted)}
@@ -153,7 +159,7 @@ details.block[open] summary::after{content:"−"}
     <span class="label">Incidencias</span>
     <div class="gauge">
       <svg viewBox="0 0 240 132" aria-hidden="true"><g id="arcs"></g><g id="needle" style="transform-origin:120px 120px"><circle cx="20" cy="120" r="11" fill="#f1f4f6" stroke="#0f171e" stroke-width="4"/></g></svg>
-      <div class="center"><b class="num" id="incCount">0</b><span id="incOf">de 11</span></div>
+      <div class="center"><b class="num" id="incCount">0</b><span id="incOf">de 10</span></div>
     </div>
     <p class="gauge-msg" id="gaugeMsg"></p>
     <div class="tiers" id="tiers"></div>
@@ -184,7 +190,7 @@ details.block[open] summary::after{content:"−"}
   </details>
 
   <section class="block">
-    <div class="year-total"><span class="label" id="yearLabel">Campaña 2026</span><b class="num" id="yearTotal">0,00 €</b></div>
+    <div class="year-total"><span class="label" id="yearLabel">Año 2026</span><b class="num" id="yearTotal">0,00 €</b></div>
     <div class="bars" id="bars"></div>
   </section>
 
@@ -199,6 +205,7 @@ details.block[open] summary::after{content:"−"}
     <div class="types" id="types" role="group" aria-label="Tipo de incidencia"></div>
     <div class="type-desc" id="typeDesc"></div>
     <form id="incForm" class="fields">
+      <div class="field full"><label>Cuenta como</label><div class="seg" id="wSeg" role="group" aria-label="Peso de la incidencia"><button type="button" data-w="1">1 incidencia</button><button type="button" data-w="0.5">0,5 incidencia</button></div></div>
       <div class="field"><label for="fDate">Fecha</label><input class="inp" id="fDate" type="date" required></div>
       <div class="field" id="amountField"><label for="fAmount">Importe (€)</label><input class="inp num" id="fAmount" type="number" inputmode="decimal" step="0.01" placeholder="0,00"></div>
       <label class="check full field" id="recField" hidden><input id="fRecovered" type="checkbox"> Recuperado en menos de 1 mes (no penaliza)</label>
@@ -216,19 +223,23 @@ details.block[open] summary::after{content:"−"}
     <h2 id="setTitle">Ajustes</h2>
     <div class="field"><label for="sStore">Tu tienda</label><select class="inp" id="sStore"></select></div>
     <h3>Cómo se calcula</h3>
-    <p>Bolsa de tu tienda × multiplicador según incidencias − pérdidas (descuadres y PACI) − faltas graves + parte comercial.</p>
+    <p>Bolsa del mes × multiplicador según incidencias − pérdidas − faltas graves + parte comercial.</p>
     <table class="tbl num"><tbody id="tierTbl"></tbody></table>
     <ul>
+      <li>Bolsa de febrero a octubre: grande 150 €, mediana 125 €, pequeña 100 €.</li>
+      <li>Bolsa de noviembre a enero: grande 250 €, mediana 200 €, pequeña 150 €.</li>
+      <li>Si causa pérdida de dinero cuenta 1; si es operativa, 0,5.</li>
+      <li>Con medias incidencias, pasar del límite de un tramo ya baja al siguiente (3,5 en tienda grande ya es ×1).</li>
       <li>Descuadres de ±5 € o menos no cuentan.</li>
       <li>Un PACI recuperado en menos de un mes no penaliza.</li>
       <li>Las pérdidas restan como máximo el total de la bolsa.</li>
-      <li>Periodo: de febrero a octubre.</li>
+      <li>Arqueos obligatorios: 2 de febrero a octubre; de noviembre a enero, 3 en tiendas medianas y grandes y 2 en pequeñas.</li>
     </ul>
     <div class="fields">
-      <div class="field"><label for="sBolsaG">Bolsa grande</label><input class="inp" id="sBolsaG" type="number" inputmode="decimal" min="0"></div>
-      <div class="field"><label for="sBolsaM">Bolsa mediana</label><input class="inp" id="sBolsaM" type="number" inputmode="decimal" min="0"></div>
-      <div class="field"><label for="sBolsaP">Bolsa pequeña</label><input class="inp" id="sBolsaP" type="number" inputmode="decimal" min="0"></div>
+      <div class="field"><label for="sBaja" id="sBajaL">Bolsa feb–oct (€)</label><input class="inp" id="sBaja" type="number" inputmode="decimal" min="0"></div>
+      <div class="field"><label for="sAlta" id="sAltaL">Bolsa nov–ene (€)</label><input class="inp" id="sAlta" type="number" inputmode="decimal" min="0"></div>
     </div>
+    <p>Cambia las bolsas solo si Central actualiza la tabla.</p>
     <h3>Copia de seguridad</h3>
     <p>Guarda un archivo con todos tus meses por si cambias de móvil.</p>
     <button class="ghost" id="exportBtn">Exportar copia</button>
@@ -246,72 +257,101 @@ details.block[open] summary::after{content:"−"}
   const STORES = {
     G: ["Palma de Mallorca","Madrid Goya","Alicante","Bilbao","Barcelona","Madrid Orense","Girona","Pamplona"],
     M: ["Coruña","Salamanca","San Sebastián","Zaragoza","Porto Pi","Logroño","Santander","Málaga Larios","Málaga Vialia","Valencia","Lérida","Bilbao Max Center"],
-    P: ["Barcelona C/ Valencia","Vigo","Madrid Oasiz","Sant Cugat","Cádiz","Sevilla Sagasta","Badajoz","Sevilla Adolfo Suarez","Manresa","Valladolid","Lugo","Elche"]
+    P: ["Barcelona C/ Valencia","Vigo","Madrid Oasiz","Sant Cugat","Cádiz","Sevilla Sagasta","Badajoz","Sevilla Adolfo Suarez","Manresa","Valladolid","Lugo","Elche","Castelldefels","Rosello"]
   };
   const SIZE_NAME = {G:"Tienda grande",M:"Tienda mediana",P:"Tienda pequeña"};
+  // Fórmula RRFF 2024 (parte cualitativa, versión 09/2024)
+  const BOLSAS = {baja:{G:150,M:125,P:100}, alta:{G:250,M:200,P:150}};
   const TIERS = {
-    G: [{max:4,m:1.1},{max:7,m:1},{max:10,m:0.8},{max:Infinity,m:0}],
-    M: [{max:3,m:1.1},{max:5,m:1},{max:9,m:0.8},{max:Infinity,m:0}]
+    G: [{max:3,m:1.1},{max:6,m:1},{max:9,m:0.8},{max:Infinity,m:0}],
+    M: [{max:2,m:1.1},{max:5,m:1},{max:8,m:0.8},{max:Infinity,m:0}]
   };
   TIERS.P = TIERS.M;
   const TIER_COLOR = ["var(--good)","var(--mid)","var(--warn)","var(--bad)"];
   const TIER_HEX = ["#5fd39a","#f2c94c","#f2913b","#ef6b5b"];
   const TIER_CLS = ["c-good","c-mid","c-warn","c-bad"];
+  const GROUPS = [
+    {g:"p", n:"Pérdida de dinero · cuenta 1", w:1},
+    {g:"o", n:"Operativa · cuenta 0,5", w:0.5},
+    {g:"x", n:"Otras · el PDF no indica el peso", w:1}
+  ];
   const TYPES = [
-    {k:"a",n:"Descuadre",d:"Descuadre de efectivo o visa. Resta lo que no se recupere. Si es de ±5 € o menos, no cuenta.",amount:true},
-    {k:"f",n:"PACI",d:"Resta lo que no se recupere. Si se recupera en menos de un mes, no penaliza.",amount:true,recover:true},
-    {k:"g",n:"Envío mail",d:"Menos del 80 % de facturas y abonos enviados al email del cliente, o correos inventados."},
-    {k:"b",n:"Educativos",d:"No enviar la documentación, o enviarla fuera de plazo o incorrecta."},
-    {k:"c",n:"Transferencias",d:"No facturar o no crear recibo en el día, o descuadrar banco 4 (NB)."},
-    {k:"d",n:"POS",d:"No mandar arqueo de cierre o no explicar devoluciones con el datáfono de POS."},
-    {k:"e",n:"Financiaciones",d:"No facturar, duplicar, mal nº de documento externo, sin ok, descuadre o no marcar entregado en Younited."},
-    {k:"h",n:"Tax Free",d:"Sin número DER en TPV, abono sin comprobaciones o un único DER para varias facturas."},
-    {k:"i",n:"Arreglos de caja",d:"Hacer tarde o mal un arreglo de caja indicado por Central."},
-    {k:"j",n:"Talón",d:"Talón mal contado."},
-    {k:"k",n:"Salida > 100 €",d:"Salida de más de 100 € de caja manual sin autorización o sin comunicarla a Central."},
-    {k:"l",n:"Devolución > 250 €",d:"Devolución de más de 250 € sin autorización."},
-    {k:"m",n:"Errores SII",d:"Demora en verificar datos de cliente que fallan al transmitirse a Hacienda."},
-    {k:"n",n:"Gestión de caja",d:"Orden del puesto, material, control de filas y caja 2, formación de BU y comerciales."}
+    {k:"efe",g:"p",n:"Descuadre efectivo",d:"Resta la pérdida que no se recupere, hasta el total de la bolsa. Si es de ±5 € o menos, no cuenta. Anota el importe que te descuentan a ti.",amount:true,small5:true},
+    {k:"visa",g:"p",n:"Descuadre visa",d:"Resta la pérdida que no se recupere, hasta el total de la bolsa. Si es de ±5 € o menos, no cuenta. Anota el importe que te descuentan a ti.",amount:true,small5:true},
+    {k:"finimp",g:"p",n:"Financiación importe",d:"Financiación con el importe descuadrado.",amount:true},
+    {k:"edu",g:"p",n:"Educativos",d:"No enviar la documentación, o enviarla fuera de plazo o incorrecta."},
+    {k:"tfimp",g:"p",n:"Tax Free importe",d:"Diferencias de importe en un Tax Free.",amount:true},
+    {k:"noafl",g:"p",n:"No aflorar descuadre",d:"No aflorar un descuadre, positivo o negativo. Además es falta grave: puede quitar hasta el 100 % (ajústalo en Faltas graves)."},
+    {k:"recom",g:"p",n:"Recompras",d:"Incidencia en recompras con pérdida de dinero.",amount:true},
+    {k:"loomis",g:"p",n:"Loomis",d:"Incidencia con Loomis con pérdida de dinero.",amount:true},
+    {k:"trf",g:"o",n:"Transferencias 1º aviso",d:"No facturar o no crear recibo en el día, o descuadrar banco 4 (NB)."},
+    {k:"findoc",g:"o",n:"Financiación nº documento",d:"Indicar mal el nº de documento externo de una financiación."},
+    {k:"pos",g:"o",n:"POS",d:"No mandar arqueo de cierre o no explicar devoluciones con el datáfono de POS."},
+    {k:"mail",g:"o",n:"Envío email",d:"Menos del 80 % de facturas y abonos enviados al email del cliente, o correos inventados."},
+    {k:"tfdoc",g:"o",n:"Tax Free nº documento",d:"No asociar el número de documento (DER) del Tax Free, o un único DER para varias facturas."},
+    {k:"arqueo",g:"o",n:"No arqueo",d:"No hacer los arqueos obligatorios: 2 de febrero a octubre; de noviembre a enero, 3 en tiendas medianas y grandes."},
+    {k:"docs",g:"o",n:"No envío de documentos",d:"No enviar la documentación que pide Central."},
+    {k:"arreglo",g:"o",n:"Arreglo de caja mal hecho",d:"Hacer tarde o mal un arreglo de caja indicado por Central."},
+    {k:"devtrf",g:"o",n:"Dev. transferencias",d:"Devolver un abono en método TRANSFERENCIA en lugar de generar recibo."},
+    {k:"sii",g:"o",n:"Mala información SII",d:"Datos de cliente que fallan al transmitirse a Hacienda o demora en corregirlos."},
+    {k:"web",g:"o",n:"Efectivo web mal creado",d:"Cobro en efectivo de un pedido web mal creado."},
+    {k:"valija",g:"o",n:"Envío valija",d:"Incidencia en el envío de la valija."},
+    {k:"paci",g:"x",n:"PACI",d:"Resta la pérdida que no se recupere. Si se recupera en menos de un mes, no penaliza.",amount:true,recover:true},
+    {k:"talon",g:"x",n:"Talón mal contado",d:"Talón mal contado.",amount:true},
+    {k:"salida",g:"x",n:"Salida de caja > 100 €",d:"Salida de más de 100 € de caja manual sin autorización o sin comunicarla a Central."},
+    {k:"devol",g:"x",n:"Devolución > 350 €",d:"Devolución de más de 350 € sin autorización."},
+    {k:"gestion",g:"x",n:"Gestión de caja",d:"Orden del puesto, material, control de filas y caja 2, formación de BU y comerciales."}
   ];
   const TYPE = Object.fromEntries(TYPES.map(t => [t.k, t]));
+  const GROUP = Object.fromEntries(GROUPS.map(g => [g.g, g]));
+  const defW = k => GROUP[TYPE[k].g].w;
+  // Tipos de la primera versión de la app
+  const OLD = {a:"efe",b:"edu",c:"trf",d:"pos",e:"findoc",f:"paci",g:"mail",h:"tfdoc",i:"arreglo",j:"talon",k:"salida",l:"devol",m:"sii",n:"gestion"};
   const MONTHS = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 
   const eur = v => v.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2}) + " €";
   const eur0 = v => v.toLocaleString("es-ES",{maximumFractionDigits:0}) + " €";
+  const fmtN = v => v.toLocaleString("es-ES",{maximumFractionDigits:1});
   const mul = m => "×" + m.toLocaleString("es-ES");
   const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
   const $ = id => document.getElementById(id);
   const uid = () => Math.random().toString(36).slice(2, 10);
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
 
-  const defaults = () => ({settings:{store:"Alicante",bolsas:{G:250,M:200,P:150}},months:{},updatedAt:0});
+  const defaults = () => ({settings:{store:"Alicante",bolsas:JSON.parse(JSON.stringify(BOLSAS))},months:{},updatedAt:0});
   let state = defaults();
   const now = new Date();
   let cur = {y: now.getFullYear(), m: now.getMonth()};
-  let selType = "a";
+  let selType = "efe", selW = 1;
 
   const key = (y, m) => y + "-" + String(m + 1).padStart(2, "0");
+  const isAlta = m => m >= 10 || m === 0; // noviembre a enero
+  const periodName = m => isAlta(m) ? "nov–ene" : "feb–oct";
   const sizeOf = store => Object.keys(STORES).find(s => STORES[s].includes(store)) || "G";
+  const arqueos = (m, size) => isAlta(m) && size !== "P" ? 3 : 2;
   const monthData = (k, create) => {
     let d = state.months[k];
     if (!d && create) d = state.months[k] = {inc:[],comercial:0,grave:0};
     return d || {inc:[],comercial:0,grave:0};
   };
   const hasAmount = i => typeof i.amount === "number" && !isNaN(i.amount);
+  const weight = i => typeof i.w === "number" ? i.w : defW(i.t);
   // No cuentan: descuadre de ±5 € o menos, o PACI recuperado en plazo
-  const excluded = i => (i.t === "a" && hasAmount(i) && Math.abs(i.amount) <= 5) || (i.t === "f" && i.recovered);
+  const excluded = i => (TYPE[i.t].small5 && hasAmount(i) && Math.abs(i.amount) <= 5) || (TYPE[i.t].recover && i.recovered);
+  // Pasar del límite de un tramo, aunque sea por media incidencia, baja al siguiente
+  const tierOf = (tiers, n) => tiers.findIndex(t => n <= t.max);
 
-  function calc(k) {
+  function calc(k, m) {
     const d = monthData(k);
     const size = sizeOf(state.settings.store);
-    const bolsa = Number(state.settings.bolsas[size]) || 0;
+    const bolsa = Number(state.settings.bolsas[isAlta(m) ? "alta" : "baja"][size]) || 0;
     const counted = d.inc.filter(i => !excluded(i));
-    const n = counted.length;
+    const n = counted.reduce((s, i) => s + weight(i), 0);
     const tiers = TIERS[size];
-    const tierIdx = tiers.findIndex(t => n <= t.max);
+    const tierIdx = tierOf(tiers, n);
     const mult = tiers[tierIdx].m;
     const base = bolsa * mult;
-    const loss = counted.filter(i => (i.t === "a" || i.t === "f") && hasAmount(i)).reduce((s, i) => s + Math.abs(i.amount), 0);
+    const loss = counted.filter(hasAmount).reduce((s, i) => s + Math.abs(i.amount), 0);
     const lossApplied = Math.min(loss, base);
     const graveCut = (base - lossApplied) * (Number(d.grave) || 0) / 100;
     const cual = Math.max(0, base - lossApplied - graveCut);
@@ -344,18 +384,17 @@ details.block[open] summary::after{content:"−"}
     });
     const f = (Math.min(r.n, limit) + 0.5) / slots;
     $("needle").style.transform = "rotate(" + (f * 180).toFixed(1) + "deg)";
-    $("incCount").textContent = r.n;
+    $("incCount").textContent = fmtN(r.n);
     $("incCount").className = "num " + TIER_CLS[r.tierIdx];
     $("incOf").textContent = r.n >= limit ? "sin incentivo" : "de " + limit + " máx.";
   }
 
   function render() {
     const k = key(cur.y, cur.m);
-    const r = calc(k);
-    const inPeriod = cur.m >= 1 && cur.m <= 9;
+    const r = calc(k, cur.m);
 
     $("monthName").textContent = cap(MONTHS[cur.m]) + " " + cur.y;
-    $("storeName").textContent = state.settings.store + " · " + SIZE_NAME[r.size] + (inPeriod ? "" : " · fuera de campaña");
+    $("storeName").textContent = state.settings.store + " · " + SIZE_NAME[r.size];
 
     // Cifra principal
     $("total").textContent = eur(r.total);
@@ -364,19 +403,20 @@ details.block[open] summary::after{content:"−"}
     if (r.lossApplied) c.append(el("span", "x", "−"), el("span", "pill c-bad", eur0(r.lossApplied)));
     if (r.graveCut) c.append(el("span", "x", "−"), el("span", "pill c-bad", eur0(r.graveCut)));
     if (r.com) c.append(el("span", "x", "+"), el("span", "pill", eur0(r.com)));
-    const notes = [];
-    if (r.lossApplied) notes.push("Pérdidas: " + eur(r.lossApplied));
-    if (r.graveCut) notes.push("Falta grave: " + (r.d.grave || 0) + " %");
-    if (r.com) notes.push("Comercial: " + eur(r.com));
-    $("heroNote").textContent = r.mult === 0 ? "Has llegado al límite de incidencias este mes" : notes.join(" · ") || "Bolsa × multiplicador";
+    const notes = ["Bolsa " + periodName(cur.m) + " " + eur0(r.bolsa), arqueos(cur.m, r.size) + " arqueos al día"];
+    if (r.lossApplied) notes.push("Pérdidas " + eur(r.lossApplied));
+    if (r.graveCut) notes.push("Falta grave " + (r.d.grave || 0) + " %");
+    if (r.com) notes.push("Comercial " + eur(r.com));
+    $("heroNote").textContent = r.mult === 0 ? "Has llegado al límite de incidencias este mes" : notes.join(" · ");
 
     // Medidor y tramos
     drawGauge(r);
     const nextT = r.tiers[r.tierIdx + 1];
     const left = r.tiers[r.tierIdx].max - r.n;
+    const nextTxt = nextT ? (nextT.m ? mul(nextT.m) : "no cobrar") : "";
     $("gaugeMsg").textContent = r.mult === 0 ? "Este mes no se cobra la parte de incidencias"
-      : left === 0 ? "Una más y bajas a " + (nextT.m ? mul(nextT.m) : "no cobrar")
-      : "Te quedan " + left + " antes de bajar a " + (nextT.m ? mul(nextT.m) : "no cobrar");
+      : left <= 0 ? "Media incidencia más y bajas a " + nextTxt
+      : "Te queda margen de " + fmtN(left) + " antes de bajar a " + nextTxt;
     const tw = $("tiers"); tw.innerHTML = "";
     r.tiers.forEach((t, i) => {
       const lo = i === 0 ? 0 : r.tiers[i - 1].max + 1;
@@ -394,8 +434,8 @@ details.block[open] summary::after{content:"−"}
     [...r.d.inc].sort((x, y) => (y.date || "").localeCompare(x.date || "")).forEach(i => {
       const off = excluded(i);
       const row = el("div", "row" + (off ? " off" : ""));
-      const tidx = off ? -1 : r.tierIdx;
-      const dot = el("span", "dot"); if (!off) dot.style.background = TIER_COLOR[tidx];
+      const w = el("span", "w num", off ? "0" : fmtN(weight(i)));
+      if (!off) w.style.color = weight(i) >= 1 ? "var(--warn)" : "var(--mid)";
       const txt = el("div", "txt");
       txt.append(el("div", "t1", TYPE[i.t].n + (hasAmount(i) ? " · " + eur(Math.abs(i.amount)) : "")));
       const dt = i.date ? new Date(i.date + "T12:00").toLocaleDateString("es-ES",{day:"numeric",month:"short"}) : "";
@@ -405,7 +445,7 @@ details.block[open] summary::after{content:"−"}
         if (!del.dataset.armed) { del.dataset.armed = "1"; del.textContent = "✓"; del.style.color = "var(--bad)"; setTimeout(() => { if (del.isConnected) { delete del.dataset.armed; del.textContent = "×"; del.style.color = ""; } }, 2500); return; }
         const d = monthData(k, true); d.inc = d.inc.filter(x => x.id !== i.id); save(); render(); toast("Incidencia borrada");
       };
-      row.append(dot, txt, del); list.append(row);
+      row.append(w, txt, del); list.append(row);
     });
 
     // Opciones
@@ -420,9 +460,9 @@ details.block[open] summary::after{content:"−"}
 
   function renderYear() {
     const y = cur.y;
-    $("yearLabel").textContent = "Campaña " + y;
+    $("yearLabel").textContent = "Año " + y;
     const vals = [];
-    for (let m = 1; m <= 9; m++) { const k = key(y, m); vals.push({m, v: state.months[k] ? calc(k).total : null}); }
+    for (let m = 0; m < 12; m++) { const k = key(y, m); vals.push({m, v: state.months[k] ? calc(k, m).total : null}); }
     const max = Math.max(1, ...vals.map(v => v.v || 0));
     $("yearTotal").textContent = eur(vals.reduce((s, v) => s + (v.v || 0), 0));
     const bars = $("bars"); bars.innerHTML = "";
@@ -438,16 +478,24 @@ details.block[open] summary::after{content:"−"}
 
   function renderTypes() {
     const box = $("types"); box.innerHTML = "";
-    TYPES.forEach(t => {
-      const b = el("button", "type", t.n); b.type = "button"; b.setAttribute("aria-pressed", t.k === selType);
-      b.onclick = () => { selType = t.k; renderTypes(); };
-      box.append(b);
+    GROUPS.forEach(g => {
+      const grp = el("div", "tgroup");
+      grp.append(el("span", "", g.n));
+      const chips = el("div", "tchips");
+      TYPES.filter(t => t.g === g.g).forEach(t => {
+        const b = el("button", "type", t.n); b.type = "button"; b.setAttribute("aria-pressed", t.k === selType);
+        b.onclick = () => { selType = t.k; selW = defW(t.k); renderTypes(); };
+        chips.append(b);
+      });
+      grp.append(chips); box.append(grp);
     });
     const t = TYPE[selType];
-    $("typeDesc").textContent = t.d;
+    $("typeDesc").textContent = t.d + (t.g === "x" ? " El PDF no dice si cuenta 1 o 0,5: por defecto cuenta 1; cámbialo si Central te indica otra cosa." : "");
     $("amountField").hidden = !t.amount;
     $("recField").hidden = !t.recover;
+    $("wSeg").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", Number(b.dataset.w) === selW));
   }
+  $("wSeg").querySelectorAll("button").forEach(b => b.onclick = () => { selW = Number(b.dataset.w); renderTypes(); });
 
   // ---- Guardado: cuenta de Claude si está disponible; si no, este móvil ----
   let dbRef = null, saveTimer = null;
@@ -465,7 +513,18 @@ details.block[open] summary::after{content:"−"}
   function normalize(s) {
     const d = defaults();
     if (!s || typeof s !== "object") return d;
-    return {settings:{...d.settings,...(s.settings||{}),bolsas:{...d.settings.bolsas,...((s.settings||{}).bolsas||{})}},months:s.months||{},updatedAt:s.updatedAt||0};
+    const st = s.settings || {};
+    const b = st.bolsas || {};
+    // Las bolsas de la versión anterior (sin periodos) se sustituyen por las del PDF nuevo
+    const bolsas = b.alta && b.baja ? {alta:{...BOLSAS.alta,...b.alta}, baja:{...BOLSAS.baja,...b.baja}} : d.settings.bolsas;
+    const months = s.months || {};
+    Object.values(months).forEach(md => (md.inc || []).forEach(i => {
+      if (OLD[i.t]) i.t = OLD[i.t];
+      if (!TYPE[i.t]) i.t = "gestion";
+      if (typeof i.w !== "number") i.w = defW(i.t);
+      if (i.amount === "" || i.amount === null) delete i.amount;
+    }));
+    return {settings:{store: st.store || d.settings.store, bolsas}, months, updatedAt: s.updatedAt || 0};
   }
   try { const raw = localStorage.getItem("rrff-state"); if (raw) state = normalize(JSON.parse(raw)); } catch (e) {}
 
@@ -503,7 +562,7 @@ details.block[open] summary::after{content:"−"}
   }));
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheets(); });
 
-  $("btnAdd").onclick = () => { $("fDate").value = defaultDate(); renderTypes(); openSheet("addSheet"); };
+  $("btnAdd").onclick = () => { $("fDate").value = defaultDate(); selW = defW(selType); renderTypes(); openSheet("addSheet"); };
 
   $("incForm").addEventListener("submit", e => {
     e.preventDefault();
@@ -511,8 +570,8 @@ details.block[open] summary::after{content:"−"}
     const date = $("fDate").value || defaultDate();
     const [yy, mm] = date.split("-").map(Number);
     const amtRaw = $("fAmount").value;
-    const item = {id: uid(), t: selType, date, note: $("fNote").value.trim()};
-    if (t.amount && amtRaw !== "") item.amount = Number(amtRaw);
+    const item = {id: uid(), t: selType, w: selW, date, note: $("fNote").value.trim()};
+    if (t.amount && amtRaw !== "" && !isNaN(Number(amtRaw))) item.amount = Number(amtRaw);
     if (t.recover) item.recovered = $("fRecovered").checked;
     monthData(key(yy, mm - 1), true).inc.push(item);
     cur = {y: yy, m: mm - 1};
@@ -533,9 +592,13 @@ details.block[open] summary::after{content:"−"}
     sel.append(g);
   });
   function fillSettings() {
+    const size = sizeOf(state.settings.store);
     sel.value = state.settings.store;
-    ["G","M","P"].forEach(s => $("sBolsa" + s).value = state.settings.bolsas[s]);
-    const r = calc(key(cur.y, cur.m));
+    $("sBaja").value = state.settings.bolsas.baja[size];
+    $("sAlta").value = state.settings.bolsas.alta[size];
+    $("sBajaL").textContent = "Bolsa feb–oct · " + SIZE_NAME[size].replace("Tienda ", "");
+    $("sAltaL").textContent = "Bolsa nov–ene · " + SIZE_NAME[size].replace("Tienda ", "");
+    const r = calc(key(cur.y, cur.m), cur.m);
     const tb = $("tierTbl"); tb.innerHTML = "";
     r.tiers.forEach((t, i) => {
       const lo = i === 0 ? 0 : r.tiers[i - 1].max + 1;
@@ -549,7 +612,9 @@ details.block[open] summary::after{content:"−"}
   }
   $("btnSettings").onclick = () => { fillSettings(); openSheet("setSheet"); };
   sel.onchange = () => { state.settings.store = sel.value; save(); render(); fillSettings(); };
-  ["G","M","P"].forEach(s => $("sBolsa" + s).addEventListener("input", e => { state.settings.bolsas[s] = Number(e.target.value) || 0; save(); render(); }));
+  [["sBaja","baja"],["sAlta","alta"]].forEach(([id, per]) => $(id).addEventListener("input", e => {
+    state.settings.bolsas[per][sizeOf(state.settings.store)] = Number(e.target.value) || 0; save(); render();
+  }));
   $("resetMonth").onclick = e => {
     const b = e.currentTarget;
     if (!b.dataset.armed) { b.dataset.armed = "1"; b.textContent = "Toca otra vez para confirmar"; return; }
