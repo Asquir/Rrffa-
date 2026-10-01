@@ -29,4 +29,4 @@ cat <<'TAIL'
 TAIL
 } > docs/index.html
 cp docs/index.html index.html
-cp docs/manifest.json docs/sw.js docs/*.png .
+cp docs/manifest.json docs/sw.js docs/*.png docs/recordatorios.ics .

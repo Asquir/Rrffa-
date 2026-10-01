@@ -101,7 +101,10 @@ details.block[open] summary::after{content:"−"}
 .year-total b{font-family:var(--display);font-size:26px;color:var(--accent)}
 
 .foot{font-size:13px;color:var(--faint);text-align:center;margin:0}
-.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--surface-2);border:1px solid var(--line);padding:12px 18px;border-radius:999px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.45);z-index:40;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--surface-2);border:1px solid var(--line);padding:8px 8px 8px 18px;border-radius:999px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.45);z-index:40;white-space:nowrap;display:flex;align-items:center;gap:12px;min-height:46px}
+.toast[hidden]{display:none}
+.toast button{border:0;background:var(--bg);color:var(--accent);font-weight:800;border-radius:999px;padding:8px 14px}
+.toast span{padding-right:10px}
 
 /* Hojas inferiores */
 .sheet{position:fixed;inset:0;background:rgba(5,9,12,.72);display:flex;align-items:flex-end;justify-content:center;z-index:30}
@@ -163,6 +166,46 @@ details.block[open] summary::after{content:"−"}
 .addrow .inp{flex:1}
 .addrow button{border:0;border-radius:14px;padding:0 16px;font-weight:800;background:var(--surface-2);color:var(--accent)}
 .count{font-weight:800;color:var(--muted);font-size:14px}
+.today-head{display:flex;align-items:center;gap:16px}
+.today-head .prog-txt p b{color:var(--fg)}
+.next{margin-top:14px;display:block;background:var(--bg);border-radius:16px;padding:12px 14px;font-size:15px}
+.next b{color:var(--accent)}
+.rems{display:flex;flex-direction:column;gap:10px}
+.rem{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px 14px 14px 16px;position:relative}
+.rem.due{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn) inset}
+.rem .when{grid-column:1;display:flex;gap:8px;align-items:center;font-size:13px;font-weight:800;color:var(--muted)}
+.rem .when .now{color:var(--bg);background:var(--warn);border-radius:999px;padding:1px 8px}
+.rem h3{grid-column:1;margin:0;font-size:18px;font-family:var(--display);font-weight:700;letter-spacing:-.01em}
+.rem .what{grid-column:1/-1;margin:0;color:var(--muted);font-size:14.5px}
+.rem .todo{grid-column:1/-1;margin:2px 0 0;font-size:15px}
+.rem .todo b{color:var(--accent)}
+.rem .check{grid-column:2;grid-row:1/3;width:48px;height:48px;border-radius:16px;border:2px solid var(--line);background:var(--surface-2);display:grid;place-items:center;padding:0}
+.rem .check svg{width:24px;height:24px;opacity:.25}
+.rem.done{opacity:.6}
+.rem.done .what,.rem.done .todo{display:none}
+.rem.done h3{text-decoration:line-through;color:var(--muted)}
+.rem.done .check{background:var(--good);border-color:var(--good)}
+.rem.done .check svg{opacity:1}
+.rem .x{grid-column:1/-1;justify-self:end;margin-top:2px;border:0;background:none;color:var(--faint);font-size:13px;font-weight:700;padding:4px}
+.cal{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--fg);background:var(--surface);border:1px dashed var(--line);border-radius:20px;padding:14px 16px}
+.cal svg{width:28px;height:28px;flex-shrink:0;color:var(--accent)}
+.cal b{display:block}
+.cal small{color:var(--muted);font-size:14px}
+.mbar{height:6px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:10px}
+.mbar i{display:block;height:100%;background:var(--good);border-radius:4px}
+.mitem{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line);cursor:pointer}
+.mitem:first-of-type{border-top:0}
+.mitem input{position:absolute;opacity:0;pointer-events:none}
+.mitem .tick{width:26px;height:26px;border-radius:8px}
+.mitem input:checked + .tick{background:var(--good);border-color:var(--good)}
+.mitem input:checked + .tick svg{opacity:1}
+.mitem input:focus-visible + .tick{outline:2px solid var(--accent);outline-offset:2px}
+.mitem span.t{flex:1;min-width:0;font-weight:600}
+.mitem input:checked ~ span.t{color:var(--muted);text-decoration:line-through}
+.mitem .del{width:30px;height:30px;font-size:16px;background:none}
+.today-strip{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px 14px;font-weight:700;width:100%;text-align:left}
+.today-strip span{flex:1}
+.today-strip b{color:var(--accent)}
 @media (prefers-reduced-motion:no-preference){#needle{transition:transform .5s cubic-bezier(.3,1.3,.5,1)}}
 </style>
 
@@ -179,7 +222,8 @@ details.block[open] summary::after{content:"−"}
     </button>
   </header>
 
-  <div class="view" id="viewInc">
+  <div class="view" id="viewInc" hidden>
+  <button class="today-strip" id="todayStrip" hidden><span id="todayStripTxt"></span><b>Ver ›</b></button>
   <section class="hero" aria-live="polite">
     <span class="label">Este mes ganas</span>
     <div class="big num" id="total">275,00 €</div>
@@ -228,33 +272,39 @@ details.block[open] summary::after{content:"−"}
 
   </div>
 
-  <div class="view" id="viewTasks" hidden>
+  <div class="view" id="viewTasks">
     <section class="hero" style="text-align:left">
-      <div class="prog">
+      <div class="today-head">
         <div class="ring"><svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="36" fill="none" stroke="#2a3a46" stroke-width="9"/><circle id="ringArc" cx="42" cy="42" r="36" fill="none" stroke="#5fd39a" stroke-width="9" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="226.2"/></svg><b class="num" id="ringPct">0%</b></div>
-        <div class="prog-txt"><h2 id="progTitle">Tareas de octubre</h2><p id="progSub">0 de 0 hechas</p></div>
+        <div class="prog-txt"><span class="label" id="todayLabel">Hoy</span><h2 id="progTitle">Tu día</h2><p id="progSub">0 de 0 hechas</p></div>
       </div>
+      <div class="next" id="nextBox"></div>
     </section>
 
-    <section class="block" id="dailyBlock">
-      <div class="block-head"><span class="label" id="dailyTitle">Hoy</span><span class="count num" id="dailyCount"></span></div>
-      <div id="dailyList"></div>
-      <form class="addrow" data-freq="d"><input class="inp" id="addDaily" type="text" placeholder="Añadir tarea diaria" aria-label="Nueva tarea diaria"><button type="submit">Añadir</button></form>
+    <section class="rems" id="dailyBlock" aria-label="Avisos de hoy">
+      <div id="dailyList" class="rems"></div>
+      <form class="addrow" data-freq="d"><input class="inp" id="addDaily" type="text" placeholder="Añadir un aviso diario" aria-label="Nuevo aviso diario"><button type="submit">Añadir</button></form>
     </section>
 
-    <section class="block">
-      <div class="block-head"><span class="label" id="monthlyTitle">Este mes</span><span class="count num" id="monthlyCount"></span></div>
-      <div id="monthlyList"></div>
+    <a class="cal" id="calLink" href="https://asquir.github.io/Rrffa-/recordatorios.ics" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      <span><b>Recibir avisos en el móvil</b><small>Añade los recordatorios al Calendario del iPhone y te avisará a su hora</small></span>
+    </a>
+
+    <details class="block" id="monthBlock">
+      <summary><span><span class="label" id="monthlyTitle">Este mes</span><span class="count num" id="monthlyCount" style="margin-left:8px"></span></span></summary>
+      <div class="mbar"><i id="monthBar" style="width:0"></i></div>
+      <div id="monthlyList" style="padding-top:8px"></div>
       <form class="addrow" data-freq="m"><input class="inp" id="addMonthly" type="text" placeholder="Añadir tarea del mes" aria-label="Nueva tarea del mes"><button type="submit">Añadir</button></form>
-    </section>
+    </details>
   </div>
 
   <p class="foot" id="saveState">Guardado en este móvil</p>
 </div>
 
 <nav class="tabbar" role="tablist" aria-label="Secciones">
-  <button class="tab" role="tab" id="tabInc" aria-selected="true" aria-controls="viewInc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 6.5A6.5 6.5 0 1 0 17 17.5M4 10.5h9M4 13.5h9"/></svg>Incentivo</button>
-  <button class="tab" role="tab" id="tabTasks" aria-selected="false" aria-controls="viewTasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg><span>Tareas<span class="badge num" id="taskBadge" hidden></span></span></button>
+  <button class="tab" role="tab" id="tabTasks" aria-selected="true" aria-controls="viewTasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg><span>Hoy<span class="badge num" id="taskBadge" hidden></span></span></button>
+  <button class="tab" role="tab" id="tabInc" aria-selected="false" aria-controls="viewInc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 6.5A6.5 6.5 0 1 0 17 17.5M4 10.5h9M4 13.5h9"/></svg>Incentivo</button>
 </nav>
 
 <!-- Añadir incidencia -->
@@ -368,31 +418,31 @@ details.block[open] summary::after{content:"−"}
   const defW = k => GROUP[TYPE[k].g].w;
   // Tipos de la primera versión de la app
   const OLD = {a:"efe",b:"edu",c:"trf",d:"pos",e:"findoc",f:"paci",g:"mail",h:"tfdoc",i:"arreglo",j:"talon",k:"salida",l:"devol",m:"sii",n:"gestion"};
-  // Tareas por defecto sacadas del PDF. freq: d = cada día, m = cada mes
-  const BASE_TASKS = [
-    {id:"d-arq-int",f:"d",n:"Arqueo intermedio",h:"En las cajas con efectivo"},
-    {id:"d-arq-cie",f:"d",n:"Arqueo de cierre",h:"En las cajas con efectivo"},
-    {id:"d-arq-3",f:"d",n:"Tercer arqueo",h:"Obligatorio de noviembre a enero en tiendas medianas y grandes",only:(m, size) => (m >= 10 || m === 0) && size !== "P"},
-    {id:"d-pos",f:"d",n:"Enviar arqueo de cierre del POS",h:"Y explicar las devoluciones hechas con el datáfono"},
-    {id:"d-trf",f:"d",n:"Transferencias facturadas con recibo",h:"El mismo día, y solo cobrar cuando haya ok"},
-    {id:"d-mail",f:"d",n:"Facturas y abonos enviados al email del cliente",h:"Correos reales; nada de correos inventados"},
-    {id:"d-desc",f:"d",n:"Descuadres revisados y aflorados",h:"Positivos y negativos, nunca dinero debajo de caja"},
-    {id:"d-tf",f:"d",n:"Tax Free con su número DER en TPV",h:"Un DER por factura"},
-    {id:"d-fin",f:"d",n:"Financiaciones del día facturadas",h:"Con ok, nº de documento correcto y entregadas en Younited"},
-    {id:"d-orden",f:"d",n:"Puesto de caja ordenado",h:"Material listo y control de filas (caja 2 si hace falta)"},
-    {id:"m-edu",f:"m",n:"Documentación de educativos enviada",h:"En plazo y correcta"},
-    {id:"m-mail",f:"m",n:"Envío de email al cliente por encima del 80 %",h:"Facturas y abonos"},
-    {id:"m-paci",f:"m",n:"PACI pendientes recuperados",h:"Plazo de un mes para que no penalicen"},
-    {id:"m-sii",f:"m",n:"Errores SII corregidos",h:"Verificar los datos de cliente que pide Central"},
-    {id:"m-arreglos",f:"m",n:"Arreglos de caja de Central hechos",h:"A tiempo y como se han explicado"},
-    {id:"m-valija",f:"m",n:"Valija enviada",h:""},
-    {id:"m-loomis",f:"m",n:"Recogidas de Loomis cuadradas",h:""},
-    {id:"m-salidas",f:"m",n:"Salidas de caja de más de 100 € autorizadas",h:"Y comunicadas a Central"},
-    {id:"m-devol",f:"m",n:"Devoluciones de más de 350 € autorizadas",h:""},
-    {id:"m-formacion",f:"m",n:"Formación de BU y comerciales en facturación",h:"Colocación del cliente en fila y conocimientos mínimos"},
-    {id:"m-material",f:"m",n:"Material y sistemas de caja revisados",h:"Suficientes para la facturación"},
-    {id:"m-app",f:"m",n:"Incidencias y parte comercial anotadas en la app",h:""},
-    {id:"m-copia",f:"m",n:"Copia de seguridad exportada",h:"Desde Ajustes"}
+  // Avisos diarios (con hora) y tareas del mes, sacados del PDF
+  const DAILY = [
+    {id:"d-orden",at:"10:00",n:"Puesto de caja listo",q:"Preparar la caja al abrir la tienda.",h:"Puesto ordenado, material y sistemas funcionando. Si hay cola, abre la caja 2."},
+    {id:"d-arq-int",at:"13:30",n:"Arqueo intermedio",q:"Recuento de las cajas con efectivo a mitad del día. Es obligatorio.",h:"Cuenta la caja y, si hay diferencia, aflórala en el momento."},
+    {id:"d-arq-3",at:"17:30",n:"Tercer arqueo",q:"De noviembre a enero las tiendas grandes y medianas hacen 3 arqueos al día.",h:"Haz un arqueo más por la tarde en las cajas con efectivo.",only:(m, size) => (m >= 10 || m === 0) && size !== "P"},
+    {id:"d-trf",at:"19:00",n:"Transferencias",q:"Cobros por transferencia de hoy.",h:"Factura y crea el recibo hoy mismo. Solo da el cobro cuando tengas el ok. Las devoluciones, con recibo."},
+    {id:"d-fin",at:"19:30",n:"Financiaciones",q:"Ventas financiadas de hoy.",h:"Factúralas con el ok, una sola vez, con el nº de documento externo correcto y márcalas como entregadas en Younited."},
+    {id:"d-tf",at:"20:00",n:"Tax Free",q:"Ventas con devolución de IVA a turistas.",h:"Pon el número DER en el TPV. Un DER por factura."},
+    {id:"d-mail",at:"20:30",n:"Emails a clientes",q:"Facturas y abonos de hoy.",h:"Que se hayan enviado al email real del cliente. Hay que estar por encima del 80 %."},
+    {id:"d-pos",at:"21:00",n:"Cierre del POS",q:"Arqueo de cierre del datáfono POS.",h:"Envíalo y explica si ha habido devoluciones con el datáfono."},
+    {id:"d-desc",at:"21:15",n:"Descuadres",q:"Diferencias de efectivo o visa al cerrar.",h:"Aflóralos siempre, positivos o negativos. Nunca guardes dinero debajo de caja."}
+  ];
+  const MONTHLY = [
+    {id:"m-edu",n:"Documentación de educativos enviada en plazo"},
+    {id:"m-mail",n:"Envío de emails por encima del 80 %"},
+    {id:"m-paci",n:"PACI pendientes recuperados (plazo 1 mes)"},
+    {id:"m-sii",n:"Errores SII corregidos"},
+    {id:"m-arreglos",n:"Arreglos de caja de Central hechos"},
+    {id:"m-valija",n:"Valija enviada"},
+    {id:"m-loomis",n:"Recogidas de Loomis cuadradas"},
+    {id:"m-salidas",n:"Salidas de caja > 100 € autorizadas y comunicadas"},
+    {id:"m-devol",n:"Devoluciones > 350 € autorizadas"},
+    {id:"m-formacion",n:"Formación de BU y comerciales en facturación"},
+    {id:"m-app",n:"Incidencias y parte comercial anotadas en la app"},
+    {id:"m-copia",n:"Copia de seguridad exportada"}
   ];
   const MONTHS = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 
@@ -530,8 +580,9 @@ details.block[open] summary::after{content:"−"}
       txt.append(el("div", "t2", [dt, i.note, off ? "no cuenta" : ""].filter(Boolean).join(" · ")));
       const del = el("button", "del", "×"); del.setAttribute("aria-label", "Borrar incidencia");
       del.onclick = () => {
-        if (!del.dataset.armed) { del.dataset.armed = "1"; del.textContent = "✓"; del.style.color = "var(--bad)"; setTimeout(() => { if (del.isConnected) { delete del.dataset.armed; del.textContent = "×"; del.style.color = ""; } }, 2500); return; }
-        const d = monthData(k, true); d.inc = d.inc.filter(x => x.id !== i.id); save(); render(); toast("Incidencia borrada");
+        const d = monthData(k, true); const pos = d.inc.indexOf(i);
+        d.inc = d.inc.filter(x => x.id !== i.id); save(); render();
+        toast("Incidencia borrada", () => { const dd = monthData(k, true); dd.inc.splice(Math.max(0, pos), 0, i); save(); render(); });
       };
       row.append(w, txt, del); list.append(row);
     });
@@ -547,81 +598,126 @@ details.block[open] summary::after{content:"−"}
     renderTasks();
   }
 
-  // ---- Tareas ----
-  function taskList(freq, m, size) {
-    const base = BASE_TASKS.filter(t => t.f === freq && !state.tasks.hidden.includes(t.id) && (!t.only || t.only(m, size)));
-    const custom = state.tasks.custom.filter(t => t.f === freq).map(t => ({...t, custom: true}));
+  // ---- Hoy y tareas del mes ----
+  const nowHM = () => { const d = new Date(); return String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0"); };
+  const TICK = '<svg viewBox="0 0 24 24" fill="none" stroke="#0f171e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  function dailyList(m, size) {
+    const base = DAILY.filter(t => !state.tasks.hidden.includes(t.id) && (!t.only || t.only(m, size)));
+    const custom = state.tasks.custom.filter(t => t.f === "d").map(t => ({...t, custom: true}));
     return base.concat(custom);
   }
-  function drawTasks(boxId, list, bucket) {
-    const box = $(boxId); box.innerHTML = "";
-    const done = state.tasks.done[bucket] || {};
-    if (!list.length) box.append(el("p", "empty", "Sin tareas."));
-    list.forEach(t => {
-      const lab = el("label", "task");
-      const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!done[t.id];
-      cb.onchange = () => {
-        const b = state.tasks.done[bucket] = state.tasks.done[bucket] || {};
-        if (cb.checked) b[t.id] = true; else delete b[t.id];
-        save(); renderTasks();
-      };
-      const tick = el("span", "tick");
-      tick.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#0f171e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-      const tt = el("span", "tt"); tt.append(el("span", "", t.n)); if (t.h) tt.append(el("small", "", t.h));
-      const del = el("button", "del", "×"); del.type = "button"; del.setAttribute("aria-label", "Quitar tarea");
-      del.onclick = e => {
-        e.preventDefault();
-        if (!del.dataset.armed) { del.dataset.armed = "1"; del.textContent = "✓"; del.style.color = "var(--bad)"; setTimeout(() => { if (del.isConnected) { delete del.dataset.armed; del.textContent = "×"; del.style.color = ""; } }, 2500); return; }
-        if (t.custom) state.tasks.custom = state.tasks.custom.filter(x => x.id !== t.id);
-        else state.tasks.hidden.push(t.id);
-        save(); renderTasks(); toast("Tarea quitada");
-      };
-      lab.append(cb, tick, tt, del); box.append(lab);
-    });
-    const n = list.filter(t => done[t.id]).length;
-    return {n, total: list.length};
+  function monthlyList() {
+    const base = MONTHLY.filter(t => !state.tasks.hidden.includes(t.id));
+    return base.concat(state.tasks.custom.filter(t => t.f === "m").map(t => ({...t, custom: true})));
+  }
+  function setDone(bucket, id, on) {
+    const b = state.tasks.done[bucket] = state.tasks.done[bucket] || {};
+    if (on) b[id] = true; else delete b[id];
+    save(); renderTasks();
+  }
+  function removeTask(t) {
+    const before = JSON.stringify(state.tasks);
+    if (t.custom) state.tasks.custom = state.tasks.custom.filter(x => x.id !== t.id);
+    else state.tasks.hidden.push(t.id);
+    save(); renderTasks();
+    toast("Quitado: " + t.n, () => { state.tasks = JSON.parse(before); save(); renderTasks(); });
   }
   function renderTasks() {
     const size = sizeOf(state.settings.store);
     const today = new Date();
     const isNowMonth = today.getFullYear() === cur.y && today.getMonth() === cur.m;
-    const mKey = key(cur.y, cur.m);
-    const monthly = drawTasks("monthlyList", taskList("m", cur.m, size), mKey);
-    $("monthlyTitle").textContent = "Este mes · " + MONTHS[cur.m];
-    $("monthlyCount").textContent = monthly.n + "/" + monthly.total;
+    const dKey = todayIso(), now = nowHM();
+
+    // Avisos del día
+    const daily = isNowMonth ? dailyList(cur.m, size) : [];
+    const dDone = state.tasks.done[dKey] || {};
+    const box = $("dailyList"); box.innerHTML = "";
+    daily.slice().sort((a, b) => (a.at || "99").localeCompare(b.at || "99")).forEach(t => {
+      const done = !!dDone[t.id];
+      const due = !done && t.at && t.at <= now;
+      const card = el("article", "rem" + (done ? " done" : "") + (due ? " due" : ""));
+      const when = el("div", "when");
+      if (t.at) when.append(el("span", "num", t.at));
+      if (due) when.append(el("span", "now", "Ya toca"));
+      if (!t.at && !done) when.append(el("span", "", "Cuando puedas"));
+      const chk = el("button", "check"); chk.innerHTML = TICK;
+      chk.setAttribute("aria-label", (done ? "Desmarcar " : "Marcar hecho: ") + t.n);
+      chk.setAttribute("aria-pressed", done);
+      chk.onclick = () => setDone(dKey, t.id, !done);
+      card.append(when, chk, el("h3", "", t.n));
+      if (t.q) card.append(el("p", "what", t.q));
+      if (t.h) { const td = el("p", "todo"); td.append(el("b", "", "Qué hacer: "), document.createTextNode(t.h)); card.append(td); }
+      if (!done) { const x = el("button", "x", "Quitar"); x.onclick = () => removeTask(t); if (!t.q && !t.h) x.style.position = "static"; card.append(x); }
+      box.append(card);
+    });
     $("dailyBlock").hidden = !isNowMonth;
-    let daily = {n: 0, total: 0};
-    if (isNowMonth) {
-      daily = drawTasks("dailyList", taskList("d", cur.m, size), todayIso());
-      $("dailyTitle").textContent = "Hoy · " + today.toLocaleDateString("es-ES", {weekday: "long", day: "numeric"});
-      $("dailyCount").textContent = daily.n + "/" + daily.total;
-    }
-    const n = monthly.n + daily.n, total = monthly.total + daily.total;
+    $("calLink").hidden = !isNowMonth;
+    const dn = daily.filter(t => dDone[t.id]).length;
+
+    // Siguiente aviso
+    const pending = daily.filter(t => !dDone[t.id]).sort((a, b) => (a.at || "99").localeCompare(b.at || "99"));
+    const late = pending.filter(t => t.at && t.at <= now);
+    const nextOne = pending.find(t => t.at && t.at > now);
+    const nb = $("nextBox"); nb.innerHTML = "";
+    if (!isNowMonth) nb.append(document.createTextNode("Los avisos diarios se ven en el mes actual."));
+    else if (!pending.length) nb.append(document.createTextNode("Todo hecho por hoy. Buen trabajo."));
+    else if (late.length) { nb.append(el("b", "", late.length === 1 ? "Ya toca: " : late.length + " pendientes: ")); nb.append(document.createTextNode(late.map(t => t.n).join(", "))); }
+    else if (nextOne) { nb.append(document.createTextNode("Siguiente: ")); nb.append(el("b", "", nextOne.n)); nb.append(document.createTextNode(" a las " + nextOne.at)); }
+    else nb.append(document.createTextNode("Te quedan " + pending.length + " por marcar hoy."));
+
+    // Tareas del mes
+    const mKey = key(cur.y, cur.m);
+    const mDone = state.tasks.done[mKey] || {};
+    const monthly = monthlyList();
+    const ml = $("monthlyList"); ml.innerHTML = "";
+    monthly.forEach(t => {
+      const lab = el("label", "mitem");
+      const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!mDone[t.id];
+      cb.onchange = () => setDone(mKey, t.id, cb.checked);
+      const tick = el("span", "tick"); tick.innerHTML = TICK;
+      const del = el("button", "del", "×"); del.type = "button"; del.setAttribute("aria-label", "Quitar " + t.n);
+      del.onclick = e => { e.preventDefault(); removeTask(t); };
+      lab.append(cb, tick, el("span", "t", t.n), del); ml.append(lab);
+    });
+    const mn = monthly.filter(t => mDone[t.id]).length;
+    $("monthlyTitle").textContent = "Tareas de " + MONTHS[cur.m];
+    $("monthlyCount").textContent = mn + "/" + monthly.length;
+    $("monthBar").style.width = (monthly.length ? mn / monthly.length * 100 : 0) + "%";
+    if (!isNowMonth) $("monthBlock").open = true;
+
+    // Cabecera
+    const n = isNowMonth ? dn : mn, total = isNowMonth ? daily.length : monthly.length;
     const pct = total ? Math.round(n / total * 100) : 0;
     $("ringArc").setAttribute("stroke-dashoffset", (226.2 * (1 - pct / 100)).toFixed(1));
     $("ringPct").textContent = pct + "%";
-    $("progTitle").textContent = n === total && total ? "Todo hecho" : "Tareas de " + MONTHS[cur.m];
-    $("progSub").textContent = n + " de " + total + " hechas";
-    const pending = total - n;
-    $("taskBadge").hidden = !pending || !isNowMonth;
-    $("taskBadge").textContent = pending;
+    $("todayLabel").textContent = isNowMonth ? "Hoy" : cap(MONTHS[cur.m]) + " " + cur.y;
+    $("progTitle").textContent = isNowMonth ? cap(today.toLocaleDateString("es-ES", {weekday: "long", day: "numeric", month: "long"})) : "Tareas del mes";
+    $("progSub").innerHTML = "";
+    $("progSub").append(el("b", "num", n + " de " + total), document.createTextNode(isNowMonth ? " avisos hechos" : " hechas"));
+    const left = isNowMonth ? daily.length - dn : 0;
+    $("taskBadge").hidden = !left; $("taskBadge").textContent = left;
+    $("todayStrip").hidden = !left;
+    $("todayStripTxt").textContent = left === 1 ? "Te queda 1 aviso por hacer hoy" : "Te quedan " + left + " avisos por hacer hoy";
   }
   document.querySelectorAll(".addrow").forEach(f => f.addEventListener("submit", e => {
     e.preventDefault();
     const inp = f.querySelector("input");
     const n = inp.value.trim();
     if (!n) return;
-    state.tasks.custom.push({id: "c-" + uid(), f: f.dataset.freq, n, h: ""});
-    inp.value = ""; save(); renderTasks(); toast("Tarea añadida");
+    state.tasks.custom.push({id: "c-" + uid(), f: f.dataset.freq, n});
+    inp.value = ""; save(); renderTasks(); toast("Añadido");
   }));
   function showTab(tasks) {
     $("viewInc").hidden = tasks; $("viewTasks").hidden = !tasks;
     $("tabInc").setAttribute("aria-selected", !tasks); $("tabTasks").setAttribute("aria-selected", tasks);
-    try { localStorage.setItem("rrff-tab", tasks ? "t" : "i"); } catch (e) {}
     window.scrollTo({top: 0});
   }
   $("tabInc").onclick = () => showTab(false);
   $("tabTasks").onclick = () => showTab(true);
+  $("todayStrip").onclick = () => showTab(true);
+  // Refresca "Ya toca" cada minuto y al volver a la app
+  setInterval(renderTasks, 60000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) renderTasks(); });
 
   function renderYear() {
     const y = cur.y;
@@ -821,14 +917,16 @@ details.block[open] summary::after{content:"−"}
   });
 
   let toastTimer;
-  function toast(msg) {
-    const t = $("toast"); t.textContent = msg; t.hidden = false;
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.hidden = true, 2200);
+  function toast(msg, undo) {
+    const t = $("toast"); t.innerHTML = "";
+    t.append(el("span", "", msg));
+    if (undo) { const b = el("button", "", "Deshacer"); b.onclick = () => { t.hidden = true; undo(); }; t.append(b); }
+    t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.hidden = true, undo ? 5000 : 2200);
   }
 
   renderTypes();
   render();
-  try { if (localStorage.getItem("rrff-tab") === "t") showTab(true); } catch (e) {}
   connect();
 })();
 </script>

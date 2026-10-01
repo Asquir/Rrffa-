@@ -1,0 +1,122 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Mis Incentivos RRFF//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Incentivos RRFF
+BEGIN:VEVENT
+UID:rrff-orden@asquir.github.io
+DTSTAMP:20261001T000000Z
+DTSTART:20261001T100000
+DTEND:20261001T101500
+RRULE:FREQ=DAILY
+SUMMARY:Caja: puesto listo
+DESCRIPTION:Puesto ordenado\, material y sistemas funcionando. Si hay cola
+ \, abre la caja 2.
+URL:https://asquir.github.io/Rrffa-/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Caja: puesto listo
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:rrff-arqint@asquir.github.io
+DTSTAMP:20261001T000000Z
+DTSTART:20261001T133000
+DTEND:20261001T134500
+RRULE:FREQ=DAILY
+SUMMARY:Arqueo intermedio
+DESCRIPTION:Cuenta las cajas con efectivo. Si hay diferencia\, aflórala e
+ n el momento.
+URL:https://asquir.github.io/Rrffa-/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Arqueo intermedio
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:rrff-arq3@asquir.github.io
+DTSTAMP:20261001T000000Z
+DTSTART:20261101T173000
+DTEND:20261101T174500
+RRULE:FREQ=DAILY;BYMONTH=11,12,1
+SUMMARY:Tercer arqueo (nov–ene)
+DESCRIPTION:De noviembre a enero toca un arqueo más por la tarde en las c
+ ajas con efectivo.
+URL:https://asquir.github.io/Rrffa-/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Tercer arqueo (nov–ene)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:rrff-cierre@asquir.github.io
+DTSTAMP:20261001T000000Z
+DTSTART:20261001T200000
+DTEND:20261001T201500
+RRULE:FREQ=DAILY
+SUMMARY:Antes de cerrar: transferencias\, financiaciones\, Tax Free y emai
+ ls
+DESCRIPTION:Transferencias facturadas con recibo. Financiaciones con ok\, 
+ nº de documento y entregadas en Younited. Tax Free con DER. Facturas y a
+ bonos enviados al email del cliente.
+URL:https://asquir.github.io/Rrffa-/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Antes de cerrar: transferencias\, financiaciones\, Tax Free y 
+ emails
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:rrff-pos@asquir.github.io
+DTSTAMP:20261001T000000Z
+DTSTART:20261001T210000
+DTEND:20261001T211500
+RRULE:FREQ=DAILY
+SUMMARY:Cierre del POS y descuadres
+DESCRIPTION:Envía el arqueo de cierre del POS y explica las devoluciones 
+ con datáfono. Aflora cualquier descuadre.
+URL:https://asquir.github.io/Rrffa-/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Cierre del POS y descuadres
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:rrff-mes25@asquir.github.io
+DTSTAMP:20261001T000000Z
+DTSTART:20261025T100000
+DTEND:20261025T101500
+RRULE:FREQ=MONTHLY;BYMONTHDAY=25
+SUMMARY:Tareas del mes RRFF
+DESCRIPTION:Revisa en la app: educativos\, emails >80 %\, PACI\, SII\, arr
+ eglos de caja\, valija y Loomis.
+URL:https://asquir.github.io/Rrffa-/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Tareas del mes RRFF
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:rrff-mes1@asquir.github.io
+DTSTAMP:20261001T000000Z
+DTSTART:20261101T100000
+DTEND:20261101T101500
+RRULE:FREQ=MONTHLY;BYMONTHDAY=1
+SUMMARY:Cierra el mes en la app de incentivos
+DESCRIPTION:Anota la parte comercial del mes pasado y exporta la copia de 
+ seguridad.
+URL:https://asquir.github.io/Rrffa-/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Cierra el mes en la app de incentivos
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
