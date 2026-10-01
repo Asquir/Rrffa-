@@ -117,7 +117,7 @@ details.block[open] summary::after{content:"−"}
 .year-total b{font-family:var(--display);font-size:26px;color:var(--accent)}
 
 .foot{font-size:13px;color:var(--faint);text-align:center;margin:0}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--surface-2);border:1px solid var(--line);padding:12px 18px;border-radius:999px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.45);z-index:40;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--surface-2);border:1px solid var(--line);padding:12px 18px;border-radius:999px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.45);z-index:40;white-space:nowrap}
 
 /* Hojas inferiores */
 .sheet{position:fixed;inset:0;background:rgba(5,9,12,.72);display:flex;align-items:flex-end;justify-content:center;z-index:30}
@@ -148,6 +148,37 @@ details.block[open] summary::after{content:"−"}
 .tbl{width:100%;border-collapse:collapse;font-size:15px}
 .tbl td{padding:8px 0;border-top:1px solid var(--line);color:var(--muted)}
 .tbl td:last-child{text-align:right;font-weight:800;color:var(--fg)}
+.app{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+.view{display:flex;flex-direction:column;gap:18px}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;gap:8px;padding:10px 18px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(15,23,30,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+.tab{flex:1;max-width:240px;border:0;background:none;border-radius:16px;padding:10px 8px;font-weight:800;font-size:15px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px}
+.tab svg{width:24px;height:24px}
+.tab[aria-selected="true"]{background:var(--surface-2);color:var(--accent)}
+.tab .badge{font-size:11px;font-weight:800;color:var(--bg);background:var(--accent);border-radius:999px;padding:0 6px;margin-left:4px}
+.prog{display:flex;align-items:center;gap:16px}
+.ring{width:84px;height:84px;flex-shrink:0;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:20px}
+.prog-txt{min-width:0}
+.prog-txt h2{font-family:var(--display);font-size:22px;margin:0}
+.prog-txt p{margin:2px 0 0;color:var(--muted);font-size:15px}
+.task{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}
+.task:first-of-type{border-top:0}
+.task input{position:absolute;opacity:0;pointer-events:none}
+.tick{width:30px;height:30px;border-radius:10px;border:2px solid var(--line);flex-shrink:0;display:grid;place-items:center;transition:background .15s,border-color .15s}
+.tick svg{width:18px;height:18px;opacity:0}
+.task input:checked + .tick{background:var(--good);border-color:var(--good)}
+.task input:checked + .tick svg{opacity:1}
+.task input:focus-visible + .tick{outline:2px solid var(--accent);outline-offset:2px}
+.task .tt{flex:1;min-width:0}
+.task .tt span{display:block;font-weight:700}
+.task .tt small{display:block;color:var(--muted);font-size:13.5px}
+.task input:checked ~ .tt span{color:var(--muted);text-decoration:line-through}
+.task .del{width:32px;height:32px;font-size:18px}
+.addrow{display:flex;gap:8px;padding-top:8px}
+.addrow .inp{flex:1}
+.addrow button{border:0;border-radius:14px;padding:0 16px;font-weight:800;background:var(--surface-2);color:var(--accent)}
+.count{font-weight:800;color:var(--muted);font-size:14px}
 @media (prefers-reduced-motion:no-preference){#needle{transition:transform .5s cubic-bezier(.3,1.3,.5,1)}}
 </style>
 
@@ -164,6 +195,7 @@ details.block[open] summary::after{content:"−"}
     </button>
   </header>
 
+  <div class="view" id="viewInc">
   <section class="hero" aria-live="polite">
     <span class="label">Este mes ganas</span>
     <div class="big num" id="total">275,00 €</div>
@@ -210,8 +242,36 @@ details.block[open] summary::after{content:"−"}
     <div class="bars" id="bars"></div>
   </section>
 
+  </div>
+
+  <div class="view" id="viewTasks" hidden>
+    <section class="hero" style="text-align:left">
+      <div class="prog">
+        <div class="ring"><svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="36" fill="none" stroke="#2a3a46" stroke-width="9"/><circle id="ringArc" cx="42" cy="42" r="36" fill="none" stroke="#5fd39a" stroke-width="9" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="226.2"/></svg><b class="num" id="ringPct">0%</b></div>
+        <div class="prog-txt"><h2 id="progTitle">Tareas de octubre</h2><p id="progSub">0 de 0 hechas</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="dailyBlock">
+      <div class="block-head"><span class="label" id="dailyTitle">Hoy</span><span class="count num" id="dailyCount"></span></div>
+      <div id="dailyList"></div>
+      <form class="addrow" data-freq="d"><input class="inp" id="addDaily" type="text" placeholder="Añadir tarea diaria" aria-label="Nueva tarea diaria"><button type="submit">Añadir</button></form>
+    </section>
+
+    <section class="block">
+      <div class="block-head"><span class="label" id="monthlyTitle">Este mes</span><span class="count num" id="monthlyCount"></span></div>
+      <div id="monthlyList"></div>
+      <form class="addrow" data-freq="m"><input class="inp" id="addMonthly" type="text" placeholder="Añadir tarea del mes" aria-label="Nueva tarea del mes"><button type="submit">Añadir</button></form>
+    </section>
+  </div>
+
   <p class="foot" id="saveState">Guardado en este móvil</p>
 </div>
+
+<nav class="tabbar" role="tablist" aria-label="Secciones">
+  <button class="tab" role="tab" id="tabInc" aria-selected="true" aria-controls="viewInc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 6.5A6.5 6.5 0 1 0 17 17.5M4 10.5h9M4 13.5h9"/></svg>Incentivo</button>
+  <button class="tab" role="tab" id="tabTasks" aria-selected="false" aria-controls="viewTasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg><span>Tareas<span class="badge num" id="taskBadge" hidden></span></span></button>
+</nav>
 
 <!-- Añadir incidencia -->
 <div class="sheet" id="addSheet" hidden>
@@ -261,6 +321,7 @@ details.block[open] summary::after{content:"−"}
     <button class="ghost" id="exportBtn">Exportar copia</button>
     <label class="ghost" for="importFile">Importar copia</label>
     <input id="importFile" type="file" accept="application/json,.json" hidden>
+    <button class="ghost" id="restoreTasks">Recuperar tareas quitadas</button>
     <button class="ghost" id="resetMonth">Vaciar este mes</button>
     <button class="primary" data-close>Listo</button>
   </div>
@@ -323,6 +384,32 @@ details.block[open] summary::after{content:"−"}
   const defW = k => GROUP[TYPE[k].g].w;
   // Tipos de la primera versión de la app
   const OLD = {a:"efe",b:"edu",c:"trf",d:"pos",e:"findoc",f:"paci",g:"mail",h:"tfdoc",i:"arreglo",j:"talon",k:"salida",l:"devol",m:"sii",n:"gestion"};
+  // Tareas por defecto sacadas del PDF. freq: d = cada día, m = cada mes
+  const BASE_TASKS = [
+    {id:"d-arq-int",f:"d",n:"Arqueo intermedio",h:"En las cajas con efectivo"},
+    {id:"d-arq-cie",f:"d",n:"Arqueo de cierre",h:"En las cajas con efectivo"},
+    {id:"d-arq-3",f:"d",n:"Tercer arqueo",h:"Obligatorio de noviembre a enero en tiendas medianas y grandes",only:(m, size) => (m >= 10 || m === 0) && size !== "P"},
+    {id:"d-pos",f:"d",n:"Enviar arqueo de cierre del POS",h:"Y explicar las devoluciones hechas con el datáfono"},
+    {id:"d-trf",f:"d",n:"Transferencias facturadas con recibo",h:"El mismo día, y solo cobrar cuando haya ok"},
+    {id:"d-mail",f:"d",n:"Facturas y abonos enviados al email del cliente",h:"Correos reales; nada de correos inventados"},
+    {id:"d-desc",f:"d",n:"Descuadres revisados y aflorados",h:"Positivos y negativos, nunca dinero debajo de caja"},
+    {id:"d-tf",f:"d",n:"Tax Free con su número DER en TPV",h:"Un DER por factura"},
+    {id:"d-fin",f:"d",n:"Financiaciones del día facturadas",h:"Con ok, nº de documento correcto y entregadas en Younited"},
+    {id:"d-orden",f:"d",n:"Puesto de caja ordenado",h:"Material listo y control de filas (caja 2 si hace falta)"},
+    {id:"m-edu",f:"m",n:"Documentación de educativos enviada",h:"En plazo y correcta"},
+    {id:"m-mail",f:"m",n:"Envío de email al cliente por encima del 80 %",h:"Facturas y abonos"},
+    {id:"m-paci",f:"m",n:"PACI pendientes recuperados",h:"Plazo de un mes para que no penalicen"},
+    {id:"m-sii",f:"m",n:"Errores SII corregidos",h:"Verificar los datos de cliente que pide Central"},
+    {id:"m-arreglos",f:"m",n:"Arreglos de caja de Central hechos",h:"A tiempo y como se han explicado"},
+    {id:"m-valija",f:"m",n:"Valija enviada",h:""},
+    {id:"m-loomis",f:"m",n:"Recogidas de Loomis cuadradas",h:""},
+    {id:"m-salidas",f:"m",n:"Salidas de caja de más de 100 € autorizadas",h:"Y comunicadas a Central"},
+    {id:"m-devol",f:"m",n:"Devoluciones de más de 350 € autorizadas",h:""},
+    {id:"m-formacion",f:"m",n:"Formación de BU y comerciales en facturación",h:"Colocación del cliente en fila y conocimientos mínimos"},
+    {id:"m-material",f:"m",n:"Material y sistemas de caja revisados",h:"Suficientes para la facturación"},
+    {id:"m-app",f:"m",n:"Incidencias y parte comercial anotadas en la app",h:""},
+    {id:"m-copia",f:"m",n:"Copia de seguridad exportada",h:"Desde Ajustes"}
+  ];
   const MONTHS = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 
   const eur = v => v.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2}) + " €";
@@ -334,12 +421,13 @@ details.block[open] summary::after{content:"−"}
   const uid = () => Math.random().toString(36).slice(2, 10);
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
 
-  const defaults = () => ({settings:{store:"Alicante",bolsas:JSON.parse(JSON.stringify(BOLSAS))},months:{},updatedAt:0});
+  const defaults = () => ({settings:{store:"Alicante",bolsas:JSON.parse(JSON.stringify(BOLSAS))},months:{},tasks:{custom:[],hidden:[],done:{}},updatedAt:0});
   let state = defaults();
   const now = new Date();
   let cur = {y: now.getFullYear(), m: now.getMonth()};
   let selType = "efe", selW = 1;
 
+  function todayIso() { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
   const key = (y, m) => y + "-" + String(m + 1).padStart(2, "0");
   const isAlta = m => m >= 10 || m === 0; // noviembre a enero
   const periodName = m => isAlta(m) ? "nov–ene" : "feb–oct";
@@ -472,7 +560,84 @@ details.block[open] summary::after{content:"−"}
     if ((r.com || r.d.grave) && !$("more").open) $("more").open = true;
 
     renderYear();
+    renderTasks();
   }
+
+  // ---- Tareas ----
+  function taskList(freq, m, size) {
+    const base = BASE_TASKS.filter(t => t.f === freq && !state.tasks.hidden.includes(t.id) && (!t.only || t.only(m, size)));
+    const custom = state.tasks.custom.filter(t => t.f === freq).map(t => ({...t, custom: true}));
+    return base.concat(custom);
+  }
+  function drawTasks(boxId, list, bucket) {
+    const box = $(boxId); box.innerHTML = "";
+    const done = state.tasks.done[bucket] || {};
+    if (!list.length) box.append(el("p", "empty", "Sin tareas."));
+    list.forEach(t => {
+      const lab = el("label", "task");
+      const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!done[t.id];
+      cb.onchange = () => {
+        const b = state.tasks.done[bucket] = state.tasks.done[bucket] || {};
+        if (cb.checked) b[t.id] = true; else delete b[t.id];
+        save(); renderTasks();
+      };
+      const tick = el("span", "tick");
+      tick.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#0f171e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+      const tt = el("span", "tt"); tt.append(el("span", "", t.n)); if (t.h) tt.append(el("small", "", t.h));
+      const del = el("button", "del", "×"); del.type = "button"; del.setAttribute("aria-label", "Quitar tarea");
+      del.onclick = e => {
+        e.preventDefault();
+        if (!del.dataset.armed) { del.dataset.armed = "1"; del.textContent = "✓"; del.style.color = "var(--bad)"; setTimeout(() => { if (del.isConnected) { delete del.dataset.armed; del.textContent = "×"; del.style.color = ""; } }, 2500); return; }
+        if (t.custom) state.tasks.custom = state.tasks.custom.filter(x => x.id !== t.id);
+        else state.tasks.hidden.push(t.id);
+        save(); renderTasks(); toast("Tarea quitada");
+      };
+      lab.append(cb, tick, tt, del); box.append(lab);
+    });
+    const n = list.filter(t => done[t.id]).length;
+    return {n, total: list.length};
+  }
+  function renderTasks() {
+    const size = sizeOf(state.settings.store);
+    const today = new Date();
+    const isNowMonth = today.getFullYear() === cur.y && today.getMonth() === cur.m;
+    const mKey = key(cur.y, cur.m);
+    const monthly = drawTasks("monthlyList", taskList("m", cur.m, size), mKey);
+    $("monthlyTitle").textContent = "Este mes · " + MONTHS[cur.m];
+    $("monthlyCount").textContent = monthly.n + "/" + monthly.total;
+    $("dailyBlock").hidden = !isNowMonth;
+    let daily = {n: 0, total: 0};
+    if (isNowMonth) {
+      daily = drawTasks("dailyList", taskList("d", cur.m, size), todayIso());
+      $("dailyTitle").textContent = "Hoy · " + today.toLocaleDateString("es-ES", {weekday: "long", day: "numeric"});
+      $("dailyCount").textContent = daily.n + "/" + daily.total;
+    }
+    const n = monthly.n + daily.n, total = monthly.total + daily.total;
+    const pct = total ? Math.round(n / total * 100) : 0;
+    $("ringArc").setAttribute("stroke-dashoffset", (226.2 * (1 - pct / 100)).toFixed(1));
+    $("ringPct").textContent = pct + "%";
+    $("progTitle").textContent = n === total && total ? "Todo hecho" : "Tareas de " + MONTHS[cur.m];
+    $("progSub").textContent = n + " de " + total + " hechas";
+    const pending = total - n;
+    $("taskBadge").hidden = !pending || !isNowMonth;
+    $("taskBadge").textContent = pending;
+  }
+  document.querySelectorAll(".addrow").forEach(f => f.addEventListener("submit", e => {
+    e.preventDefault();
+    const inp = f.querySelector("input");
+    const n = inp.value.trim();
+    if (!n) return;
+    state.tasks.custom.push({id: "c-" + uid(), f: f.dataset.freq, n, h: ""});
+    inp.value = ""; save(); renderTasks(); toast("Tarea añadida");
+  }));
+  function showTab(tasks) {
+    $("viewInc").hidden = tasks; $("viewTasks").hidden = !tasks;
+    $("tabInc").setAttribute("aria-selected", !tasks); $("tabTasks").setAttribute("aria-selected", tasks);
+    try { localStorage.setItem("rrff-tab", tasks ? "t" : "i"); } catch (e) {}
+    window.scrollTo({top: 0});
+  }
+  $("tabInc").onclick = () => showTab(false);
+  $("tabTasks").onclick = () => showTab(true);
 
   function renderYear() {
     const y = cur.y;
@@ -540,7 +705,9 @@ details.block[open] summary::after{content:"−"}
       if (typeof i.w !== "number") i.w = defW(i.t);
       if (i.amount === "" || i.amount === null) delete i.amount;
     }));
-    return {settings:{store: st.store || d.settings.store, bolsas}, months, updatedAt: s.updatedAt || 0};
+    const tk = s.tasks || {};
+    const tasks = {custom: Array.isArray(tk.custom) ? tk.custom : [], hidden: Array.isArray(tk.hidden) ? tk.hidden : [], done: tk.done || {}};
+    return {settings:{store: st.store || d.settings.store, bolsas}, months, tasks, updatedAt: s.updatedAt || 0};
   }
   try { const raw = localStorage.getItem("rrff-state"); if (raw) state = normalize(JSON.parse(raw)); } catch (e) {}
 
@@ -563,7 +730,6 @@ details.block[open] summary::after{content:"−"}
   }
 
   // ---- Eventos ----
-  const todayIso = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); };
   function defaultDate() {
     const t = new Date();
     return (t.getFullYear() === cur.y && t.getMonth() === cur.m) ? todayIso() : key(cur.y, cur.m) + "-01";
@@ -631,6 +797,7 @@ details.block[open] summary::after{content:"−"}
   [["sBaja","baja"],["sAlta","alta"]].forEach(([id, per]) => $(id).addEventListener("input", e => {
     state.settings.bolsas[per][sizeOf(state.settings.store)] = Number(e.target.value) || 0; save(); render();
   }));
+  $("restoreTasks").onclick = () => { state.tasks.hidden = []; save(); renderTasks(); toast("Tareas recuperadas"); };
   $("resetMonth").onclick = e => {
     const b = e.currentTarget;
     if (!b.dataset.armed) { b.dataset.armed = "1"; b.textContent = "Toca otra vez para confirmar"; return; }
@@ -677,6 +844,7 @@ details.block[open] summary::after{content:"−"}
 
   renderTypes();
   render();
+  try { if (localStorage.getItem("rrff-tab") === "t") showTab(true); } catch (e) {}
   connect();
 })();
 </script>

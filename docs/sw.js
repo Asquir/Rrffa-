@@ -1,5 +1,5 @@
 // Funciona sin conexión. La página se pide primero a la red para recibir siempre la última versión.
-const CACHE = "incentivos-v3";
+const CACHE = "incentivos-v4";
 const FILES = ["./", "index.html", "manifest.json", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener("activate", e => {
