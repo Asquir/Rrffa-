@@ -1,5 +1,5 @@
 #!/bin/sh
-# Genera la versión instalable (docs/) a partir de index.html
+# Genera la versión instalable (raíz y docs/) a partir de src/app.html, que es el archivo del artefacto
 set -e
 cd "$(dirname "$0")"
 {
@@ -21,10 +21,12 @@ cat <<'HEAD'
 </head>
 <body>
 HEAD
-cat index.html
+cat src/app.html
 cat <<'TAIL'
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});</script>
 </body>
 </html>
 TAIL
 } > docs/index.html
+cp docs/index.html index.html
+cp docs/manifest.json docs/sw.js docs/*.png .
